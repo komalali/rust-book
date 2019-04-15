@@ -35,14 +35,21 @@ impl Config {
         if args.len() == 4 {
             let case_insensitive = args[3] == "--case-insensitive";
             if case_insensitive {
-                return Ok(Config { query, filename, case_sensitive: false });
+                return Ok(Config {
+                    query,
+                    filename,
+                    case_sensitive: !case_insensitive,
+                });
             } else {
                 return Err("option not recognized");
             }
         }
-        let case_sensitive = env::var("CASE_INSENSITIVE").is_err();
-
-        Ok(Config { query, filename, case_sensitive })
+        let case_insensitive = env::var("CASE_INSENSITIVE").unwrap_or_default() == "1";
+        Ok(Config {
+            query,
+            filename,
+            case_sensitive: !case_insensitive,
+        })
     }
 }
 
