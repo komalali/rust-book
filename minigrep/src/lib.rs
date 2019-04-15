@@ -32,6 +32,14 @@ impl Config {
         let query = args[1].clone();
         let filename = args[2].clone();
 
+        if args.len() == 4 {
+            let case_insensitive = args[3] == "--case-insensitive";
+            if case_insensitive {
+                return Ok(Config { query, filename, case_sensitive: false });
+            } else {
+                return Err("option not recognized");
+            }
+        }
         let case_sensitive = env::var("CASE_INSENSITIVE").is_err();
 
         Ok(Config { query, filename, case_sensitive })
